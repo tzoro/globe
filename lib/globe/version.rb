@@ -38,30 +38,39 @@ module Globe
 		private
 
 		def create_resource(resourceObject, dbIndentifier, filename)
-				object = resourceObject
-				attributes = object.new.attribute_names
-				path = File.expand_path("../..", __FILE__) + '/globe/vendor/GeoWorldMap/' + filename
-				file = File.open(path, 'r:Windows-1252').read
-				file.gsub!(/\r\n?/, '')
+			object = resourceObject
+			attributes = object.new.attribute_names
 
-				file.each_line.with_index do |line, index|
-						next if index == 0
-					data = line.split(',')
-					record = object.where(" '#{dbIndentifier}' = ?",data[0]).first
+			path = File.expand_path("../..", __FILE__) + '/globe/vendor/GeoWorldMap/' + filename
+			file = File.open(path, 'r:Windows-1252').read
+			file.gsub!(/\r?/, '')
 
-					if record.nil?
-						cleanData = clean_array(data)
-						attrs = attributes - ['id', 'created_at', 'updated_at']
-						h = Hash[attrs.zip cleanData]
-						n = object.new(h)
-						n.save
-						puts 'create: ' + n.id.to_s
+			file.each_line.with_index do |line, index|
+				next if index == 0
+
+				data = line.split(',')
+				record = object.find_or_initialize_by_CityId(data[0]) #@TODO: replace CityId with var
+
+				if record != nil
+					cleanData = clean_array(data)
+					attrs = attributes - ['id', 'created_at', 'updated_at']
+					h = Hash[attrs.zip cleanData]
+					record.update_attributes(h)
+					if record.new_record?
+						action = 'create'
+					else
+						action = 'update'
 					end
+					record.save
+					puts 'File line: ' + index.to_s + ' | Action: ' + action
+				else
+					puts 'Error in parsing file line ' + index
 				end
+			end
 		end
 
 		def clean_value(value)	
-			return value.delete!('"') # Ruby < 1.9.2 problem here
+			return value.delete!('"') # Ruby < 1.9.2 ?
 		end
 
 		def clean_array(array)
