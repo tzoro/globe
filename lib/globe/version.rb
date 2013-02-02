@@ -31,8 +31,8 @@ module Globe
 			region = Globe::Region
 			country = Globe::Country
 			create_resource(city, 'CityId', 'cities.txt')
-			create_resource(region, 'CityId', 'regions.txt')
-			create_resource(country, 'CityId', 'countries.txt')
+			create_resource(region, 'RegionId', 'regions.txt')
+			create_resource(country, 'CountryId', 'countries.txt')
 		end
 
 		private
@@ -47,26 +47,25 @@ module Globe
 
 			file.each_line.with_index do |line, index|
 				next if index == 0
-
 				data = line.split(',')
-				record = object.find_or_initialize_by_CityId(data[0]) #@TODO: replace CityId with var
+				record = object.where(dbIndentifier => data[0]).first 
 
-				if record != nil
-					cleanData = clean_array(data)
-					attrs = attributes - ['id', 'created_at', 'updated_at']
-					h = Hash[attrs.zip cleanData]
-					record.update_attributes(h)
-					if record.new_record?
-						action = 'create'
-					else
-						action = 'update'
-					end
-					record.save
-					puts 'File line: ' + index.to_s + ' | Action: ' + action
+				if record == nil
+					record = object.new
+					action = 'create'
 				else
-					puts 'Error in parsing file line ' + index
+					action = 'update'
 				end
+
+				cleanData = clean_array(data)
+				attrs = attributes - ['id', 'created_at', 'updated_at']
+				h = Hash[attrs.zip cleanData]
+				record.update_attributes(h)
+				record.save
+				puts 'line:' + index.to_s + ' | ' + action + ' | type:' + record.class.name
 			end
+
+			return
 		end
 
 		def clean_value(value)	
