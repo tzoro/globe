@@ -13,7 +13,7 @@ module Globe
 	class Country < ActiveRecord::Base
 		self.table_name = 'globe_countries'
 		attr_accessible :CountryId, :Country, :FIPS104, :ISO2, :ISO3, :ISON, :Internet, :Capital, :MapReference, :NationalitySingular, :NationalityPlural, :Currency, :CurrencyCode, :Population, :Title, :Comment
-		has_many :cities, :class_name => 'City', :primary_key => 'CountryId', :foreign_key => 'CountryId'
+		has_many :cities, :class_name => 'City', :primary_key => 'CountryId', :foreign_key => 'CountryID'
 		has_many :regions, :class_name => 'Globe::Region', :primary_key => 'CountryId', :foreign_key => 'CountryId'
 	end
 
