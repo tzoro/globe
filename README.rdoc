@@ -2,16 +2,9 @@
 
 This project rocks and uses MIT-LICENSE.
 
-### How to:
+How to:
 
-1. ' Add gem to your bundle file'
-gem 'globe', :git => 'git://github.com/tzoro/globe.git'
-
-2. 'Create migrations'
-rails generate globe:install
-
-3. 'Migrate'
-rake db:migrate
-
-3. 'Populate data'
-rake globe:create
+* Add gem to your bundle file -> 'gem 'globe', :git => 'git://github.com/tzoro/globe.git'
+* Create migrations -> 'rails generate globe:install'
+* Migrate -> 'rake db:migrate'
+* Populate data -> 'rake globe:create'
