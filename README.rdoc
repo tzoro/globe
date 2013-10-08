@@ -2,7 +2,7 @@
 
 This project rocks and uses MIT-LICENSE.
 
-How to:
+### How to:
 
 1. ' Add gem to your bundle file'
 gem 'globe', :git => 'git://github.com/tzoro/globe.git'
