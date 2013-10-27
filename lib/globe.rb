@@ -5,21 +5,21 @@ module Globe
 
 	class City < ActiveRecord::Base
 		self.table_name = 'globe_cities'
-		attr_accessible :CityId, :CountryID, :RegionID, :City, :Longitude, :Latitude, :TimeZone, :DmaId, :Code
+		#attr_accessible :CityId, :CountryID, :RegionID, :City, :Longitude, :Latitude, :TimeZone, :DmaId, :Code
 		belongs_to :country, :class_name => 'Country', :primary_key => 'CountryId', :foreign_key => 'CountryId'
 		belongs_to :region, :class_name => 'Globe::Region', :primary_key => 'RegionID', :foreign_key => 'RegionId'
 	end
 
 	class Country < ActiveRecord::Base
 		self.table_name = 'globe_countries'
-		attr_accessible :CountryId, :Country, :FIPS104, :ISO2, :ISO3, :ISON, :Internet, :Capital, :MapReference, :NationalitySingular, :NationalityPlural, :Currency, :CurrencyCode, :Population, :Title, :Comment
+		#attr_accessible :CountryId, :Country, :FIPS104, :ISO2, :ISO3, :ISON, :Internet, :Capital, :MapReference, :NationalitySingular, :NationalityPlural, :Currency, :CurrencyCode, :Population, :Title, :Comment
 		has_many :cities, :class_name => 'City', :primary_key => 'CountryId', :foreign_key => 'CountryID'
 		has_many :regions, :class_name => 'Globe::Region', :primary_key => 'CountryId', :foreign_key => 'CountryId'
 	end
 
 	class Region < ActiveRecord::Base
 		self.table_name = 'globe_regions'
-		attr_accessible :RegionId, :CountryId, :Region, :Code, :ADM1Code
+		#attr_accessible :RegionId, :CountryId, :Region, :Code, :ADM1Code
 		belongs_to :country, :class_name => 'Globe::Country', :primary_key => 'CountryId', :foreign_key => 'CountryId'
 		has_many :cities, :class_name => 'Globe::City', :primary_key => 'RegionId', :foreign_key => 'RegionID'
 	end
@@ -41,7 +41,7 @@ module Globe
 			object = resourceObject
 			attributes = object.new.attribute_names
 
-			path = File.expand_path("../..", __FILE__) + '/globe/vendor/GeoWorldMap/' + filename
+			path = File.expand_path("../..", __FILE__) + '/lib/globe/vendor/GeoWorldMap/' + filename
 			file = File.open(path, 'r:Windows-1252').read
 			file.gsub!(/\r?/, '')
 
